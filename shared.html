@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fichiers Partagés - CloudDrive</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <header class="header">
+        <div class="logo">CloudDrive</div>
+        <div class="user-menu">
+            <div class="user-info">
+                <div class="avatar" id="userAvatar">TE</div>
+                <div>
+                    <div id="userName">Tendry</div>
+                    <div class="storage-text">
+                        <span id="usedStorage">700 Mo</span> / 
+                        <span id="totalStorage">1 Go</span>
+                    </div>
+                </div>
+                <div class="storage-bar" style="--progress: 70%"></div>
+            </div>
+            <button class="btn btn-secondary" onclick="window.location.href='index.html'">
+                <i class="fas fa-arrow-left"></i> Mes fichiers
+            </button>
+            <button class="btn btn-secondary" onclick="logout()">
+                <i class="fas fa-sign-out-alt"></i> Déconnexion
+            </button>
+        </div>
+    </header>
+
+    <div class="app-container">
+        <nav class="sidebar">
+            <div class="nav-section">
+                <div class="nav-title">Navigation</div>
+                <a href="index.html" class="nav-item">
+                    <i class="fas fa-folder"></i> Mes fichiers
+                </a>
+                <a href="shared.html" class="nav-item active">
+                    <i class="fas fa-share-alt"></i> Fichiers partagés
+                </a>
+                <a href="#" class="nav-item" onclick="showComingSoon()">
+                    <i class="fas fa-clock"></i> Récents
+                </a>
+                <a href="#" class="nav-item" onclick="showComingSoon()">
+                    <i class="fas fa-trash"></i> Corbeille
+                </a>
+            </div>
+
+            <div class="nav-section">
+                <div class="nav-title">Types de partage</div>
+                <a href="#" class="nav-item" onclick="filterFiles('shared-by-me')">
+                    <i class="fas fa-share-square"></i> Partagés par moi
+                </a>
+                <a href="#" class="nav-item" onclick="filterFiles('shared-with-me')">
+                    <i class="fas fa-user-friends"></i> Partagés avec moi
+                </a>
+                <a href="#" class="nav-item" onclick="filterFiles('public')">
+                    <i class="fas fa-globe"></i> Publics
+                </a>
+            </div>
+
+            <div class="nav-section">
+                <div class="nav-title">Actions</div>
+                <button class="nav-item" onclick="createShareLink()">
+                    <i class="fas fa-link"></i> Nouveau lien
+                </button>
+                <button class="nav-item" onclick="showComingSoon()">
+                    <i class="fas fa-cog"></i> Paramètres
+                </button>
+            </div>
+        </nav>
+
+        <main class="main-content">
+            <div class="content-header">
+                <h1>Fichiers partagés</h1>
+                <div class="actions">
+                    <input type="text" class="form-input" placeholder="Rechercher..." 
+                           style="width: 300px;" id="searchInput">
+                    <button class="btn btn-primary" onclick="createShareLink()">
+                        <i class="fas fa-link"></i> Nouveau lien
+                    </button>
+                </div>
+            </div>
+
+            <div class="share-stats">
+                <div class="stat-card">
+                    <div class="stat-value" id="totalShares">2</div>
+                    <div>Fichiers partagés</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value" id="sharedWith">1</div>
+                    <div>Personnes</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value" id="totalViews">15</div>
+                    <div>Vues totales</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value" id="totalDownloads">3</div>
+                    <div>Téléchargements</div>
+                </div>
+            </div>
+
+            <div class="files-list">
+                <div class="file-row file-row-header">
+                    <div>Nom</div>
+                    <div>Type de partage</div>
+                    <div>Partagé avec</div>
+                    <div>Permissions</div>
+                    <div>Expiration</div>
+                    <div>Actions</div>
+                </div>
+                
+                <div class="file-row">
+                    <div>
+                        <i class="fas fa-file-pdf"></i> RAPPORT_ANNUL...
+                    </div>
+                    <div>Partagé par moi</div>
+                    <div>Public</div>
+                    <div>Lecture seule</div>
+                    <div>Jamais</div>
+                    <div>
+                        <button class="action-btn" onclick="copyLink(1)">
+                            <i class="fas fa-copy"></i>
+                        </button>
+                        <button class="action-btn" onclick="revokeShare(1)">
+                            <i class="fas fa-times"></i>
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="file-row">
+                    <div>
+                        <i class="fas fa-file-image"></i> Vacances.jpg
+                    </div>
+                    <div>Partagé avec moi</div>
+                    <div>ami@example.com</div>
+                    <div>Lecture seule</div>
+                    <div>30/01/2024</div>
+                    <div>
+                        <button class="action-btn" onclick="copyLink(2)">
+                            <i class="fas fa-copy"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Modal création lien -->
+    <div id="createLinkModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="modal-title">Créer un lien de partage</div>
+                <button class="close-modal" onclick="closeModal('createLinkModal')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label class="form-label">Sélectionner un fichier</label>
+                    <select class="form-input" id="fileSelect">
+                        <option value="">Choisir un fichier...</option>
+                        <option value="1">RAPPORT_ANNUL... (2 MB)</option>
+                        <option value="3">Présentation.pptx (8 MB)</option>
+                        <option value="6">INTRODUCTION ... (50 KB)</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Permissions</label>
+                    <select class="form-input" id="permissions">
+                        <option value="view">Lecture seule</option>
+                        <option value="edit">Lecture/Écriture</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Expiration</label>
+                    <select class="form-input" id="expiration">
+                        <option value="never">Jamais</option>
+                        <option value="7days">7 jours</option>
+                        <option value="30days">30 jours</option>
+                    </select>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="closeModal('createLinkModal')">Annuler</button>
+                <button class="btn btn-primary" onclick="createLink()">Créer le lien</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/auth.js"></script>
+    <script src="js/api.js"></script>
+    <script>
+        // Initialisation
+        document.addEventListener('DOMContentLoaded', function() {
+            // Mettre à jour le nom d'utilisateur
+            const user = JSON.parse(localStorage.getItem('clouddrive_user'));
+            if (user) {
+                document.getElementById('userName').textContent = user.name;
+                document.getElementById('userAvatar').textContent = user.avatar;
+            }
+        });
+        
+        // Fonctions
+        function createShareLink() {
+            document.getElementById('createLinkModal').classList.add('show');
+        }
+        
+        function createLink() {
+            const fileSelect = document.getElementById('fileSelect');
+            const permissions = document.getElementById('permissions');
+            const expiration = document.getElementById('expiration');
+            
+            if (!fileSelect.value) {
+                alert('Veuillez sélectionner un fichier');
+                return;
+            }
+            
+            const link = `https://clouddrive.com/share/${Date.now()}`;
+            navigator.clipboard.writeText(link).then(() => {
+                alert('Lien créé et copié !\n\n' + link);
+                closeModal('createLinkModal');
+            }).catch(() => {
+                alert('Lien créé : ' + link);
+                closeModal('createLinkModal');
+            });
+        }
+        
+        function copyLink(fileId) {
+            const link = `https://clouddrive.com/share/${fileId}`;
+            navigator.clipboard.writeText(link).then(() => {
+                alert('Lien copié !');
+            });
+        }
+        
+        function revokeShare(fileId) {
+            if (confirm('Révoquer ce partage ?')) {
+                alert('Partage révoqué');
+            }
+        }
+        
+        function filterFiles(type) {
+            alert(`Affichage des fichiers ${type}`);
+        }
+        
+        function closeModal(modalId) {
+            document.getElementById(modalId).classList.remove('show');
+        }
+        
+        function showComingSoon() {
+            alert('Fonctionnalité bientôt disponible !');
+        }
+        
+        function logout() {
+            if (confirm('Déconnexion ?')) {
+                localStorage.removeItem('clouddrive_user');
+                window.location.href = 'login.html';
+            }
+        }
+    </script>
+</body>
+</html>

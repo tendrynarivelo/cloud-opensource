@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mon Profil - CloudDrive</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <!-- Header (identique à index.html) -->
+    <header class="header">
+        <div class="logo">CloudDrive</div>
+        <div class="user-menu">
+            <div class="user-info">
+                <div class="avatar" id="userAvatar">JD</div>
+                <div>
+                    <div id="userName">John Doe</div>
+                    <div class="storage-text">
+                        <span id="usedStorage">700 Mo</span> / 
+                        <span id="totalStorage">1 Go</span>
+                    </div>
+                </div>
+                <div class="storage-bar" style="--progress: 70%"></div>
+            </div>
+            <button class="btn btn-secondary" onclick="window.location.href='index.html'">
+                <i class="fas fa-arrow-left"></i> Retour
+            </button>
+            <button class="btn btn-secondary" onclick="logout()">
+                <i class="fas fa-sign-out-alt"></i> Déconnexion
+            </button>
+        </div>
+    </header>
+
+    <div class="app-container">
+        <!-- Sidebar -->
+        <nav class="sidebar">
+            <div class="nav-section">
+                <div class="nav-title">Navigation</div>
+                <a href="index.html" class="nav-item">
+                    <i class="fas fa-folder"></i> Mes fichiers
+                </a>
+                <a href="shared.html" class="nav-item">
+                    <i class="fas fa-share-alt"></i> Fichiers partagés
+                </a>
+                <a href="profile.html" class="nav-item active">
+                    <i class="fas fa-user"></i> Mon profil
+                </a>
+                <a href="#" class="nav-item" onclick="showComingSoon()">
+                    <i class="fas fa-cog"></i> Paramètres
+                </a>
+            </div>
+
+            <div class="nav-section">
+                <div class="nav-title">Espace de stockage</div>
+                <div class="storage-info">
+                    <div class="meter">
+                        <div class="meter-header">
+                            <span>Utilisé</span>
+                            <span id="storageUsed">700 Mo</span>
+                        </div>
+                        <div class="meter-bar">
+                            <div class="meter-fill" id="storageFill" style="width: 70%"></div>
+                        </div>
+                    </div>
+                    <div class="meter">
+                        <div class="meter-header">
+                            <span>Disponible</span>
+                            <span id="storageAvailable">300 Mo</span>
+                        </div>
+                        <div class="meter-bar">
+                            <div class="meter-fill" id="storageAvailableFill" style="width: 30%"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="nav-section">
+                <div class="nav-title">Actions</div>
+                <button class="nav-item" onclick="showUpgradeModal()">
+                    <i class="fas fa-rocket"></i> Augmenter l'espace
+                </button>
+                <button class="nav-item" onclick="showEditProfile()">
+                    <i class="fas fa-edit"></i> Modifier le profil
+                </button>
+                <button class="nav-item" onclick="showSecuritySettings()">
+                    <i class="fas fa-shield-alt"></i> Sécurité
+                </button>
+            </div>
+        </nav>
+
+        <!-- Main Content -->
+        <main class="main-content profile-container">
+            <div class="profile-header">
+                <div class="profile-avatar-large" id="profileAvatarLarge">JD</div>
+                <div class="profile-info">
+                    <h2 id="profileName">John Doe</h2>
+                    <p id="profileEmail">john.doe@example.com</p>
+                    <p>Membre depuis : <span id="memberSince">Janvier 2024</span></p>
+                    <div style="margin-top: 1rem;">
+                        <button class="btn btn-primary" onclick="showEditProfile()">
+                            <i class="fas fa-edit"></i> Modifier le profil
+                        </button>
+                        <button class="btn btn-secondary" onclick="changeAvatar()">
+                            <i class="fas fa-camera"></i> Changer la photo
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="profile-details">
+                <div class="detail-item">
+                    <div class="detail-label">Nom complet</div>
+                    <div class="detail-value" id="detailName">John Doe</div>
+                </div>
+                <div class="detail-item">
+                    <div class="detail-label">Email</div>
+                    <div class="detail-value" id="detailEmail">john.doe@example.com</div>
+                </div>
+                <div class="detail-item">
+                    <div class="detail-label">Téléphone</div>
+                    <div class="detail-value" id="detailPhone">Non défini</div>
+                </div>
+                <div class="detail-item">
+                    <div class="detail-label">Adresse</div>
+                    <div class="detail-value" id="detailAddress">Non définie</div>
+                </div>
+                <div class="detail-item">
+                    <div class="detail-label">Date d'inscription</div>
+                    <div class="detail-value" id="detailJoined">15 Janvier 2024</div>
+                </div>
+                <div class="detail-item">
+                    <div class="detail-label">Dernière connexion</div>
+                    <div class="detail-value" id="detailLastLogin">Aujourd'hui, 14:30</div>
+                </div>
+            </div>
+
+            <div class="storage-meters">
+                <h3 style="margin-bottom: 1.5rem;">Utilisation du stockage</h3>
+                
+                <div class="meter">
+                    <div class="meter-header">
+                        <span>Documents</span>
+                        <span>150 Mo (15%)</span>
+                    </div>
+                    <div class="meter-bar">
+                        <div class="meter-fill" style="width: 15%"></div>
+                    </div>
+                </div>
+                
+                <div class="meter">
+                    <div class="meter-header">
+                        <span>Images</span>
+                        <span>300 Mo (30%)</span>
+                    </div>
+                    <div class="meter-bar">
+                        <div class="meter-fill" style="width: 30%"></div>
+                    </div>
+                </div>
+                
+                <div class="meter">
+                    <div class="meter-header">
+                        <span>Vidéos</span>
+                        <span>500 Mo (50%)</span>
+                    </div>
+                    <div class="meter-bar">
+                        <div class="meter-fill" style="width: 50%"></div>
+                    </div>
+                </div>
+                
+                <div class="meter">
+                    <div class="meter-header">
+                        <span>Autres</span>
+                        <span>50 Mo (5%)</span>
+                    </div>
+                    <div class="meter-bar">
+                        <div class="meter-fill" style="width: 5%"></div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Modal d'édition du profil -->
+    <div id="editProfileModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="modal-title">Modifier le profil</div>
+                <button class="close-modal" onclick="closeModal('editProfileModal')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label class="form-label">Nom complet</label>
+                    <input type="text" class="form-input" id="editName" value="John Doe">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Email</label>
+                    <input type="email" class="form-input" id="editEmail" value="john.doe@example.com">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Téléphone</label>
+                    <input type="tel" class="form-input" id="editPhone" placeholder="+33 1 23 45 67 89">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Adresse</label>
+                    <textarea class="form-input" id="editAddress" rows="3" placeholder="Votre adresse"></textarea>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="closeModal('editProfileModal')">Annuler</button>
+                <button class="btn btn-primary" onclick="saveProfile()">Enregistrer</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal de changement de mot de passe -->
+    <div id="changePasswordModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="modal-title">Changer le mot de passe</div>
+                <button class="close-modal" onclick="closeModal('changePasswordModal')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label class="form-label">Mot de passe actuel</label>
+                    <input type="password" class="form-input" id="currentPassword">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Nouveau mot de passe</label>
+                    <input type="password" class="form-input" id="newPassword">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Confirmer le nouveau mot de passe</label>
+                    <input type="password" class="form-input" id="confirmNewPassword">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="closeModal('changePasswordModal')">Annuler</button>
+                <button class="btn btn-primary" onclick="changePassword()">Changer</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/auth.js"></script>
+    <script src="js/profile.js"></script>
+</body>
+</html>
